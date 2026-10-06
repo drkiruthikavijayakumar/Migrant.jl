@@ -1,0 +1,30 @@
+name = "migrant"
+uuid = "a3f5b721-e8d9-47b2-9e36-123456789abc"
+version = "0.1.0"
+authors = ["Antigravity"]
+
+[deps]
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DecisionTree = "7806a523-6efd-50cb-b5f6-3fa6f1930dbb"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+FASTX = "c2308a5c-f048-11e8-3e8a-31650f418d12"
+Kmers = "445028e4-d31f-4f27-89ad-17affd83fc22"
+MLJ = "add582a8-e3ab-11e8-2d5e-e98b27df1bc7"
+MLJDecisionTreeInterface = "c6f25543-311c-4c74-83dc-3ea6d1015661"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+BioSequences = "3.4.2"
+CSV = "0.10.17"
+DataFrames = "1.8.2"
+DecisionTree = "0.12.4"
+Documenter = "1.19.0"
+Downloads = "1.7.0"
+FASTX = "2.2.0"
+Kmers = "1.2.0"
+MLJ = "0.23.3"
+MLJDecisionTreeInterface = "0.5.0"
+Test = "1.11.0"

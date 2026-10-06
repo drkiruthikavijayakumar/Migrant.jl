@@ -1,0 +1,11 @@
+*.jl.cov
+*.jl.stat
+*.jl.mem
+*.fastq
+*.fasta
+*.gff3
+*.html
+*.csv
+/Manifest.toml
+/docs/build/
+.DS_Store
