@@ -3,7 +3,7 @@
 [![CI](https://github.com/username/migrant.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/username/migrant.jl/actions/workflows/CI.yml)
 
 ## Overview
-**migrant.jl** is an end-to-end clinical oncology pipeline written in Julia. It provides tools for tracking tumor microbiome migration using deep oral non-coding DNA (ncDNA) footprints, alongside comprehensive Virulence Profiling. The package uses a built-in Machine Learning engine to predict oncogenic (tumor tropism) risk directly from sequencing data.
+**migrant.jl** is a high-performance Julia package for tracing tumor microbiome translocation via whole-non-coding DNA profiling and virulence tracking. It provides specialized tools for extracting host and non-coding sequence footprints to efficiently isolate translocating bacterial signatures from sequencing data.
 
 ## Installation
 You can install `migrant.jl` using the Julia package manager:
@@ -12,27 +12,26 @@ You can install `migrant.jl` using the Julia package manager:
 ```
 
 ## Quickstart
-Here is a basic example of running the end-to-end Clinical Decision Support Tool (CDST) pipeline:
+Here is a basic example of tracking translocating DNA:
 
 ```julia
 using migrant
-using MLJ
 
-# Load your trained MLJ machine (tropism model)
-# mach = ... 
+# 1. Build the host index and deplete host sequences
+host_idx = build_host_index("data/host_ref.fasta", 31)
+filter_host_reads("data/oral.fastq", "clean_oral.fastq", host_idx, 31, 0.1)
+filter_host_reads("data/tumor.fastq", "clean_tumor.fastq", host_idx, 31, 0.1)
 
-risk_score = run_cdst_pipeline(
-    "Patient_001",
-    "data/oral.fastq",
-    "data/tumor.fastq",
+# 2. Analyze the migration via the core engine
+res = analyze_migration(
+    "clean_oral.fastq",
+    "clean_tumor.fastq",
     "data/host_ref.fasta",
     "data/bacterial_ref.fasta",
-    "data/bacterial_annotations.gff3",
-    mach,
-    "patient_001_report.html";
+    "data/bacterial_annotations.gff3";
     k = 31,
     host_threshold = 0.1
 )
 
-println("Tumor Tropism Risk: ", round(risk_score * 100, digits=2), "%")
+println("Migration Containment Score: ", round(res.containment_score * 100, digits=2), "%")
 ```

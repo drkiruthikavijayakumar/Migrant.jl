@@ -2,4 +2,4 @@
 
 Welcome to the documentation for **migrant.jl**!
 
-`migrant.jl` is an end-to-end Julia package for tracking tumor microbiome migration using non-coding DNA and predicting oncogenic risk via Machine Learning.
+`migrant.jl` is a high-performance Julia package for tracing tumor microbiome translocation via whole-non-coding DNA profiling and virulence tracking.

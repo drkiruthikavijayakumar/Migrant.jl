@@ -3,8 +3,15 @@ using BioSequences
 using Kmers
 
 function extract_kmers(record::FASTQ.Record, k::Int)
-    seq = FASTQ.sequence(LongDNA{4}, record)
-    return Set{DNAKmer{k}}(CanonicalDNAMers{k}(seq))
+    seq_str = FASTQ.sequence(String, record)
+    kmers = Set{DNAKmer{k}}()
+    for chunk in split(seq_str, r"[^ACGTacgt]")
+        if length(chunk) >= k
+            chunk_seq = LongDNA{4}(chunk)
+            union!(kmers, CanonicalDNAMers{k}(chunk_seq))
+        end
+    end
+    return kmers
 end
 
 function build_host_index(fasta_path::String, k::Int)
@@ -12,9 +19,12 @@ function build_host_index(fasta_path::String, k::Int)
     host_index = Set{DNAKmer{k}}()
     try
         for record in reader
-            seq = FASTA.sequence(LongDNA{4}, record)
-            for kmer in CanonicalDNAMers{k}(seq)
-                push!(host_index, kmer)
+            seq_str = FASTA.sequence(String, record)
+            for chunk in split(seq_str, r"[^ACGTacgt]")
+                if length(chunk) >= k
+                    chunk_seq = LongDNA{4}(chunk)
+                    union!(host_index, CanonicalDNAMers{k}(chunk_seq))
+                end
             end
         end
     finally

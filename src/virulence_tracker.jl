@@ -7,18 +7,21 @@ function build_virulence_index(fasta_path::String, cds_coords::Array{Tuple{Int, 
     record = first(reader)
     close(reader)
     
-    seq = FASTA.sequence(LongDNA{4}, record)
+    seq_str = FASTA.sequence(String, record)
     virulence_index = Dict{Tuple{Int, Int}, Set{DNAKmer{k}}}()
     
     for (start_idx, end_idx) in cds_coords
         start_idx = max(1, start_idx)
-        end_idx = min(length(seq), end_idx)
+        end_idx = min(length(seq_str), end_idx)
         
         gene_kmers = Set{DNAKmer{k}}()
         if start_idx <= end_idx
-            sub_seq = seq[start_idx:end_idx]
-            for kmer in CanonicalDNAMers{k}(sub_seq)
-                push!(gene_kmers, kmer)
+            sub_seq_str = seq_str[start_idx:end_idx]
+            for chunk in split(sub_seq_str, r"[^ACGTacgt]")
+                if length(chunk) >= k
+                    chunk_seq = LongDNA{4}(chunk)
+                    union!(gene_kmers, CanonicalDNAMers{k}(chunk_seq))
+                end
             end
         end
         virulence_index[(start_idx, end_idx)] = gene_kmers

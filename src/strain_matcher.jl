@@ -8,21 +8,24 @@ function build_ncdna_footprint(fasta_path::String, coords::Array{Tuple{Int, Int}
     record = first(reader)
     close(reader)
     
-    seq = FASTA.sequence(LongDNA{4}, record)
+    seq_str = FASTA.sequence(String, record)
     oral_kmers = Set{DNAKmer{k}}()
     
     for (start_idx, end_idx) in coords
         # Ensure indices are within bounds
         start_idx = max(1, start_idx)
-        end_idx = min(length(seq), end_idx)
+        end_idx = min(length(seq_str), end_idx)
         
         if start_idx > end_idx
             continue
         end
         
-        sub_seq = seq[start_idx:end_idx]
-        for kmer in CanonicalDNAMers{k}(sub_seq)
-            push!(oral_kmers, kmer)
+        sub_seq_str = seq_str[start_idx:end_idx]
+        for chunk in split(sub_seq_str, r"[^ACGTacgt]")
+            if length(chunk) >= k
+                chunk_seq = LongDNA{4}(chunk)
+                union!(oral_kmers, CanonicalDNAMers{k}(chunk_seq))
+            end
         end
     end
     
