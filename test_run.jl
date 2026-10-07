@@ -14,15 +14,16 @@ println("Starting MIGRANT.jl on CRC Paired WGS Data...")
 println("This may take some time depending on file size. Initiating Host Depletion and K-mer Mapping...")
 
 # Use @time to see exactly how fast your Julia package is!
+
 @time result = analyze_migration(
     oral_fastq, 
     tumor_fastq, 
-    host_fasta, 
     bact_fasta, 
     bact_gff3;
     k = 31,
-    host_threshold = 0.1
+    target_threshold = 0.05  # <--- Changed this from host_threshold
 )
+
 
 println("\n--- TEST RESULTS ---")
 println("Strain Migration Confidence (ncDNA Containment): ", round(result.containment_score * 100, digits=2), "%")
