@@ -9,7 +9,6 @@ using Downloads
 # -------------------------------------------------------------------------
 oral_fastq      = "path/to/public_oral.fastq"
 tumor_fastq     = "path/to/public_tumor.fastq"
-host_fasta      = "path/to/human_reference.fasta"
 bacterial_fasta = "path/to/fusobacterium_nucleatum.fasta"
 bacterial_gff3  = "path/to/fusobacterium_nucleatum.gff3"
 
@@ -20,11 +19,10 @@ try
     @time result = analyze_migration(
         oral_fastq, 
         tumor_fastq, 
-        host_fasta, 
         bacterial_fasta, 
         bacterial_gff3; 
         k=31, 
-        host_threshold=0.1
+        target_threshold=0.05
     )
 
     println("\n========================================")

@@ -3,12 +3,12 @@ using migrant
 using FASTX
 using BioSequences
 
-@testset "migrant.jl tests" begin
-    # 1. Generate dummy host .fasta
-    host_fasta = tempname() * ".fasta"
-    open(host_fasta, "w") do io
-        write(io, ">host_seq\n")
-        write(io, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n")
+@testset "Target Extraction" begin
+    # 1. Generate dummy target .fasta
+    target_fasta = tempname() * ".fasta"
+    open(target_fasta, "w") do io
+        write(io, ">target_seq\n")
+        write(io, "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\n")
     end
     
     # 2. Generate dummy .fastq with 2 human-like and 2 bacterial-like reads
@@ -29,9 +29,9 @@ using BioSequences
     k = 15
     threshold = 0.5
     
-    # Run host depletion
-    host_index = build_host_index(host_fasta, k)
-    filter_host_reads(reads_fastq, out_fastq, host_index, k, threshold)
+    # Run target extraction
+    target_index = build_target_index(target_fasta, k)
+    extract_target_reads(reads_fastq, out_fastq, target_index, k, threshold)
     
     # Assert output contains exactly 2 reads
     # And specifically they should be bac1 and bac2
@@ -47,7 +47,7 @@ using BioSequences
     @test "bac2" in out_reads
     
     # Cleanup
-    rm(host_fasta, force=true)
+    rm(target_fasta, force=true)
     rm(reads_fastq, force=true)
     rm(out_fastq, force=true)
 end
@@ -154,11 +154,6 @@ end
 @testset "End-to-End Core" begin
     k = 15
     
-    host_fasta = tempname() * ".fasta"
-    open(host_fasta, "w") do io
-        write(io, ">host\n", "A"^100, "\n")
-    end
-    
     bac_fasta = tempname() * ".fasta"
     open(bac_fasta, "w") do io
         write(io, ">bac\n", "C"^50 * "G"^50, "\n")
@@ -179,15 +174,13 @@ end
         write(io, "@t1\n", "G"^50, "\n+\n", "!"^50, "\n")
     end
     
-    res = analyze_migration(oral_fastq, tumor_fastq, host_fasta, bac_fasta, bac_gff; k=15, host_threshold=0.1)
+    res = analyze_migration(oral_fastq, tumor_fastq, bac_fasta, bac_gff; k=15, target_threshold=0.05)
     
     @test res.containment_score isa Float64
     @test res.virulence_profile isa Dict
     
-    rm(host_fasta, force=true)
     rm(bac_fasta, force=true)
     rm(bac_gff, force=true)
     rm(oral_fastq, force=true)
     rm(tumor_fastq, force=true)
 end
-
