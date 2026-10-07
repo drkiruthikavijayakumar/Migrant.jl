@@ -30,14 +30,14 @@ function build_virulence_index(fasta_path::String, cds_coords::Array{Tuple{Int, 
     return virulence_index
 end
 
-function profile_virulence(tumor_fastq::String, virulence_index::Dict, k::Int)
-    tumor_kmers = Set{DNAKmer{k}}()
-    reader = FASTQ.Reader(open(tumor_fastq, "r"))
+function profile_virulence(sink_fastq::String, virulence_index::Dict, k::Int)
+    sink_kmers = Set{DNAKmer{k}}()
+    reader = FASTQ.Reader(open(sink_fastq, "r"))
     
     try
         for record in reader
             kmers = extract_kmers(record, k)
-            union!(tumor_kmers, kmers)
+            union!(sink_kmers, kmers)
         end
     finally
         close(reader)
@@ -49,7 +49,7 @@ function profile_virulence(tumor_fastq::String, virulence_index::Dict, k::Int)
         if isempty(gene_kmers)
             results[gene_coords] = 0.0
         else
-            coverage = length(intersect(gene_kmers, tumor_kmers)) / length(gene_kmers)
+            coverage = length(intersect(gene_kmers, sink_kmers)) / length(gene_kmers)
             results[gene_coords] = coverage
         end
     end

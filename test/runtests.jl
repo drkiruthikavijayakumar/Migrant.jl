@@ -93,11 +93,11 @@ end
     coords = [(1, 50)]
     
     # 2. Build ncDNA footprint
-    oral_kmers = build_ncdna_footprint(bac_fasta, coords, k)
+    source_kmers = build_ncdna_footprint(bac_fasta, coords, k)
     
-    # 3. Create dummy tumor .fastq containing reads perfectly matching "A"^50
-    tumor_fastq = tempname() * ".fastq"
-    open(tumor_fastq, "w") do io
+    # 3. Create dummy sink .fastq containing reads perfectly matching "A"^50
+    sink_fastq = tempname() * ".fastq"
+    open(sink_fastq, "w") do io
         write(io, "@read1\n")
         write(io, "A"^50 * "\n")
         write(io, "+\n")
@@ -105,13 +105,13 @@ end
     end
     
     # 4. Calculate k-mer containment
-    containment = calculate_kmer_containment(tumor_fastq, oral_kmers, k)
+    containment = calculate_kmer_containment(sink_fastq, source_kmers, k)
     
     @test containment == 1.0
     
     # Cleanup
     rm(bac_fasta, force=true)
-    rm(tumor_fastq, force=true)
+    rm(sink_fastq, force=true)
 end
 
 @testset "Virulence Tracker" begin
@@ -131,9 +131,9 @@ end
     # 2. Build virulence index
     virulence_index = build_virulence_index(bac_fasta, cds_coords, k)
     
-    # 3. Create dummy tumor .fastq containing reads perfectly matching "G"^50
-    tumor_fastq = tempname() * ".fastq"
-    open(tumor_fastq, "w") do io
+    # 3. Create dummy sink .fastq containing reads perfectly matching "G"^50
+    sink_fastq = tempname() * ".fastq"
+    open(sink_fastq, "w") do io
         write(io, "@read1\n")
         write(io, "G"^50 * "\n")
         write(io, "+\n")
@@ -141,14 +141,14 @@ end
     end
     
     # 4. Profile virulence
-    results = profile_virulence(tumor_fastq, virulence_index, k)
+    results = profile_virulence(sink_fastq, virulence_index, k)
     
     @test haskey(results, (1, 50))
     @test results[(1, 50)] == 1.0
     
     # Cleanup
     rm(bac_fasta, force=true)
-    rm(tumor_fastq, force=true)
+    rm(sink_fastq, force=true)
 end
 
 @testset "End-to-End Core" begin
@@ -164,23 +164,23 @@ end
         write(io, "seq\t.\tCDS\t1\t50\t.\t+\t.\tID=cds1\n")
     end
     
-    oral_fastq = tempname() * ".fastq"
-    open(oral_fastq, "w") do io
+    source_fastq = tempname() * ".fastq"
+    open(source_fastq, "w") do io
         write(io, "@o1\n", "C"^50, "\n+\n", "!"^50, "\n")
     end
     
-    tumor_fastq = tempname() * ".fastq"
-    open(tumor_fastq, "w") do io
+    sink_fastq = tempname() * ".fastq"
+    open(sink_fastq, "w") do io
         write(io, "@t1\n", "G"^50, "\n+\n", "!"^50, "\n")
     end
     
-    res = analyze_migration(oral_fastq, tumor_fastq, bac_fasta, bac_gff; k=15, target_threshold=0.05)
+    res = analyze_migration(source_fastq, sink_fastq, bac_fasta, bac_gff; k=15, target_threshold=0.05)
     
     @test res.containment_score isa Float64
     @test res.virulence_profile isa Dict
     
     rm(bac_fasta, force=true)
     rm(bac_gff, force=true)
-    rm(oral_fastq, force=true)
-    rm(tumor_fastq, force=true)
+    rm(source_fastq, force=true)
+    rm(sink_fastq, force=true)
 end
