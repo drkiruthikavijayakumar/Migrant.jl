@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
     tags: '*'
   pull_request:
 jobs:
@@ -13,7 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.10'
           - '1' # automatically expands to the latest stable 1.x release of Julia
         os:
           - ubuntu-latest
