@@ -15,7 +15,7 @@ You can install `migrant.jl` using the Julia package manager:
 Here is a basic example of tracking translocating DNA:
 
 ```julia
-using migrant
+using Migrant
 
 # 1. Build the target index and extract bacterial sequences
 target_idx = build_target_index("data/bacterial_ref.fasta", 31)

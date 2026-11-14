@@ -1,5 +1,5 @@
 using Test
-using migrant
+using Migrant
 using FASTX
 using BioSequences
 

@@ -1,4 +1,4 @@
-module migrant
+module Migrant
 
 include("target_extract.jl")
 include("gff_parser.jl")
