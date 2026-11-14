@@ -6,16 +6,14 @@ authors = ["Kiruthika Vijayakumar", "Benedict Christopher Paul"]
 [deps]
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-Downloads = "f43a241f-c20a-4ad4-852c-614d45cd2de4"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
 FASTX = "c2308a5c-f048-11e8-3e8a-31650f418d12"
 Kmers = "445028e4-d31f-4f27-89ad-17affd83fc22"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-BioSequences = "3.4.2"
-Documenter = "1.19.0"
-Downloads = "1.7.0"
-FASTX = "2.2.0"
-Kmers = "1.2.0"
-Test = "1.11.0"
-julia = "1.11"
+BioSequences = "3"
+Documenter = "1"
+FASTX = "2"
+Kmers = "1"
+julia = "1.10"
