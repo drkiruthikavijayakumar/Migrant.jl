@@ -3,7 +3,7 @@
 [![CI](https://github.com/username/migrant.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/username/migrant.jl/actions/workflows/CI.yml)
 
 ## Overview
-**migrant.jl** is a high-performance Julia package for tracing tumor microbiome translocation via whole-non-coding DNA profiling and virulence tracking. It provides specialized tools for extracting target bacterial sequences and non-coding footprints to efficiently isolate translocating bacterial signatures from sequencing data.
+**migrant.jl** is a high-performance Julia package for tracing tumor microbiome translocation via whole-non-coding DNA profiling and functional coding sequence (CDS) tracking. It provides specialized tools for extracting target bacterial sequences and non-coding footprints to efficiently isolate translocating bacterial signatures from sequencing data.
 
 ## Installation
 You can install `migrant.jl` using the Julia package manager:

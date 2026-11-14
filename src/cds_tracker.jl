@@ -2,13 +2,13 @@ using FASTX
 using BioSequences
 using Kmers
 
-function build_virulence_index(fasta_path::String, cds_coords::Array{Tuple{Int, Int}}, k::Int)
+function build_cds_index(fasta_path::String, cds_coords::Array{Tuple{Int, Int}}, k::Int)
     reader = FASTA.Reader(open(fasta_path, "r"))
     record = first(reader)
     close(reader)
     
     seq_str = FASTA.sequence(String, record)
-    virulence_index = Dict{Tuple{Int, Int}, Set{DNAKmer{k}}}()
+    cds_index = Dict{Tuple{Int, Int}, Set{DNAKmer{k}}}()
     
     for (start_idx, end_idx) in cds_coords
         start_idx = max(1, start_idx)
@@ -24,13 +24,13 @@ function build_virulence_index(fasta_path::String, cds_coords::Array{Tuple{Int, 
                 end
             end
         end
-        virulence_index[(start_idx, end_idx)] = gene_kmers
+        cds_index[(start_idx, end_idx)] = gene_kmers
     end
     
-    return virulence_index
+    return cds_index
 end
 
-function profile_virulence(sink_fastq::String, virulence_index::Dict, k::Int)
+function profile_cds(sink_fastq::String, cds_index::Dict, k::Int)
     sink_kmers = Set{DNAKmer{k}}()
     reader = FASTQ.Reader(open(sink_fastq, "r"))
     
@@ -45,7 +45,7 @@ function profile_virulence(sink_fastq::String, virulence_index::Dict, k::Int)
     
     results = Dict{Tuple{Int, Int}, Float64}()
     
-    for (gene_coords, gene_kmers) in virulence_index
+    for (gene_coords, gene_kmers) in cds_index
         if isempty(gene_kmers)
             results[gene_coords] = 0.0
         else

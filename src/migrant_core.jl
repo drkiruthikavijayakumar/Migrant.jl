@@ -3,7 +3,7 @@ using BioSequences
 
 struct MigrationResult
     containment_score::Float64
-    virulence_profile::Dict{Tuple{Int, Int}, Float64}
+    cds_profile::Dict{Tuple{Int, Int}, Float64}
 end
 
 function analyze_migration(source_fastq::String, sink_fastq::String, bacterial_fasta::String, bacterial_gff3::String; k::Int=31, target_threshold::Float64=0.05)
@@ -30,13 +30,13 @@ function analyze_migration(source_fastq::String, sink_fastq::String, bacterial_f
     source_ncdna_kmers = build_ncdna_footprint(bacterial_fasta, ncdna_coords, k)
     score = calculate_kmer_containment(clean_sink, source_ncdna_kmers, k)
     
-    # Virulence Profiling
-    vir_idx = build_virulence_index(bacterial_fasta, cds_coords, k)
-    v_profile = profile_virulence(clean_sink, vir_idx, k)
+    # CDS Functional Profiling
+    cds_idx = build_cds_index(bacterial_fasta, cds_coords, k)
+    cds_prof = profile_cds(clean_sink, cds_idx, k)
     
     # Cleanup
     rm(clean_source, force=true)
     rm(clean_sink, force=true)
     
-    return MigrationResult(score, v_profile)
+    return MigrationResult(score, cds_prof)
 end

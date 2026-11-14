@@ -114,7 +114,7 @@ end
     rm(sink_fastq, force=true)
 end
 
-@testset "Virulence Tracker" begin
+@testset "CDS Tracker" begin
     k = 15
     
     # 1. Create dummy bacterial .fasta file
@@ -128,8 +128,8 @@ end
     # CDS coordinates: (1, 50) - corresponding to "G"^50
     cds_coords = [(1, 50)]
     
-    # 2. Build virulence index
-    virulence_index = build_virulence_index(bac_fasta, cds_coords, k)
+    # 2. Build CDS index
+    cds_index = build_cds_index(bac_fasta, cds_coords, k)
     
     # 3. Create dummy sink .fastq containing reads perfectly matching "G"^50
     sink_fastq = tempname() * ".fastq"
@@ -140,8 +140,8 @@ end
         write(io, "!"^50 * "\n")
     end
     
-    # 4. Profile virulence
-    results = profile_virulence(sink_fastq, virulence_index, k)
+    # 4. Profile CDS
+    results = profile_cds(sink_fastq, cds_index, k)
     
     @test haskey(results, (1, 50))
     @test results[(1, 50)] == 1.0
@@ -177,7 +177,7 @@ end
     res = analyze_migration(source_fastq, sink_fastq, bac_fasta, bac_gff; k=15, target_threshold=0.05)
     
     @test res.containment_score isa Float64
-    @test res.virulence_profile isa Dict
+    @test res.cds_profile isa Dict
     
     rm(bac_fasta, force=true)
     rm(bac_gff, force=true)
