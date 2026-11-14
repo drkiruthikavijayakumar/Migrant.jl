@@ -57,7 +57,11 @@ function profile_cds(sink_fastq::String, cds_index::Dict, k::Int)
     return results
 end
 
-function classify_cds_profile(cds_profile::Dict{Tuple{Int, Int}, Float64}; intact_threshold::Float64=0.90)
+function classify_cds_profile(
+    cds_profile::Dict{Tuple{Int, Int}, Float64};
+    detection_threshold::Float64=0.05,
+    intact_threshold::Float64=0.95
+)
     intact = Tuple{Int, Int}[]
     fragmented = Tuple{Int, Int}[]
     undetected = Tuple{Int, Int}[]
@@ -65,7 +69,7 @@ function classify_cds_profile(cds_profile::Dict{Tuple{Int, Int}, Float64}; intac
     for (coords, cov) in cds_profile
         if cov >= intact_threshold
             push!(intact, coords)
-        elseif cov > 0.0
+        elseif cov > detection_threshold
             push!(fragmented, coords)
         else
             push!(undetected, coords)
