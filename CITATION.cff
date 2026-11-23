@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use Migrant.jl in your research, please cite our manuscript."
+message: "If you use Migrant.jl in your research, please cite this software."
 title: "Migrant.jl: Alignment-free microbial tracking via non-coding and functional DNA profiling"
 type: software
 authors:
@@ -7,7 +7,7 @@ authors:
     given-names: "Kiruthika"
   - family-names: "Paul"
     given-names: "Benedict Christopher"
-repository-code: "https://github.com/drkiruthikavijayakumar/migrant.jl"
+repository-code: "https://github.com/drkiruthikavijayakumar/Migrant.jl"
 license: MIT
 version: "1.0.0"
-date-released: "2026-11-14"
+date-released: "2026-11-23"

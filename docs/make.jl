@@ -1,9 +1,11 @@
-using Documenter, migrant
+using Documenter
+using Migrant
 
 makedocs(
-    sitename="migrant.jl",
-    modules=[migrant],
-    pages=[
-        "Home" => "index.md"
+    sitename = "Migrant.jl",
+    modules = [Migrant],
+    pages = [
+        "Home" => "index.md",
+        "API Reference" => "api.md"
     ]
 )

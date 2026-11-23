@@ -1,5 +1,5 @@
-# migrant.jl Documentation
+# Migrant.jl Documentation
 
-Welcome to the documentation for **migrant.jl**!
+Welcome to the documentation for **Migrant.jl**!
 
-`migrant.jl` is a high-performance Julia package for tracing tumor microbiome translocation via whole-non-coding DNA profiling and functional coding sequence (CDS) tracking.
+`Migrant.jl` is an alignment-free, memory-efficient Julia package for tracing microbial translocation via whole non-coding DNA (ncDNA) fingerprinting and functional coding sequence (CDS) profiling.
